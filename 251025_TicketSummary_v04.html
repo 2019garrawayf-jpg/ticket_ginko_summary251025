@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>銀行サービスの未来を考える | Garrawy F チケット分析レポート</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 
+         * 基本設定（トーン＆マナー、配色）
+         * --- */
+        :root {
+            --base-color: #FFFFFF;
+            --text-color: #333333;
+            --accent-color: #FFF157; /* メインの黄色 */
+            --accent-color-dark: #FDE800;
+            --sub-color-blue: #A0D7E7; /* サブの青 */
+            --sub-color-green: #B2E0B2; /* サブの緑 */
+            --gray-color: #f4f4f4;
+            --light-gray-color: #EAEAEA; /* グレー */
+            --border-color: #eee;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--base-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-color);
+        }
+
+        p {
+            margin-bottom: 1.5em;
+        }
+
+        a {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: var(--accent-color-dark);
+        }
+
+        /* --- 
+         * レイアウト（余白の活用、レスポンシブ）
+         * --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        /* ヘッダー */
+        .header {
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            position: relative;
+            display: inline-block;
+        }
+        .header h1::after {
+            content: '';
+            display: block;
+            width: 60%;
+            height: 5px;
+            background-color: var(--accent-color);
+            margin: 10px auto 0;
+            border-radius: 5px;
+        }
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* セクション見出し */
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .section-title::before {
+            /* あしらい: 手書き風の線 */
+            content: '/////';
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            color: var(--accent-color);
+            font-size: 1rem;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            letter-spacing: -2px;
+            opacity: 0.7;
+        }
+
+        /* --- 
+         * アニメーション（インタラクション）
+         * --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* セクションごとに遅延させる */
+        section:nth-of-type(1) { animation-delay: 0.2s; }
+        section:nth-of-type(2) { animation-delay: 0.4s; }
+        section:nth-of-type(3) { animation-delay: 0.6s; }
+        section:nth-of-type(4) { animation-delay: 0.8s; }
+        section:nth-of-type(5) { animation-delay: 1.0s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- 
+         * セクション別デザイン
+         * --- */
+
+        /* 1. 属性 (円グラフ) */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        .profile-item {
+            background-color: var(--base-color);
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .profile-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .profile-item h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+        .pie-chart-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+        }
+        .pie-chart {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            /* ★改善点: 枠線を点線から実線（または削除）に変更 */
+            /* border: 3px dashed var(--border-color); */ /* 削除 */
+            box-sizing: border-box;
+            border: 1px solid var(--border-color); /* シンプルな枠線に変更 */
+        }
+        
+        /* ★改善点: 円グラフの配色変更 */
+        #pie-age {
+            background-image: conic-gradient(
+                var(--accent-color) 0% 37.06%,      /* 20代 */
+                var(--sub-color-blue) 37.06% 70.63%, /* 30-40代 */
+                var(--sub-color-green) 70.63% 95.17%, /* 10代 */
+                var(--light-gray-color) 95.17% 100%   /* 50代+ */
+            );
+        }
+        #pie-gender {
+            background-image: conic-gradient(
+                var(--sub-color-blue) 0% 70.71%,      /* 男性 */
+                var(--accent-color) 70.71% 99.89%, /* 女性 */
+                var(--light-gray-color) 99.89% 100%     /* 不明 */
+            );
+        }
+        #pie-residence {
+            background-image: conic-gradient(
+                var(--accent-color) 0% 76.28%,      /* 福岡市内 */
+                var(--sub-color-blue) 76.28% 91.06%, /* 市外で県内 */
+                var(--sub-color-green) 91.06% 94.65%, /* 首都圏 */
+                var(--light-gray-color) 94.65% 100%     /* その他 */
+            );
+        }
+        .pie-legend {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            font-size: 0.9rem;
+            text-align: left;
+            display: inline-block;
+        }
+        .pie-legend li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 5px;
+        }
+        .pie-legend li::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* ★改善点: 凡例の色変更 */
+        .legend-color-1::before { background-color: var(--accent-color); }
+        .legend-color-2::before { background-color: var(--sub-color-blue); }
+        .legend-color-3::before { background-color: var(--sub-color-green); }
+        .legend-color-4::before { background-color: var(--light-gray-color); }
+        /* グラフ固有の凡例色（性別） */
+        .legend-color-male::before { background-color: var(--sub-color-blue); }
+        .legend-color-female::before { background-color: var(--accent-color); }
+        .legend-color-unknown::before { background-color: var(--light-gray-color); }
+
+
+        /* 2. 不便さカテゴリ (棒グラフ) */
+        .bar-chart-container {
+            width: 100%;
+            background-color: var(--gray-color);
+            padding: 30px;
+            border-radius: 10px;
+            box-sizing: border-box;
+            /* あしらい: ドット背景 */
+            background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 15px 15px;
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .bar-label {
+            width: 180px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .bar-wrap {
+            flex-grow: 1;
+            height: 30px;
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .bar {
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 15px;
+            text-align: right;
+            line-height: 30px;
+            padding-right: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #555;
+            box-sizing: border-box;
+            white-space: nowrap;
+            animation: expandBar 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes expandBar {
+            from { width: 0; }
+        }
+
+        /* 3. 属性と不便さの相関 (テーブル) */
+        .correlation-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        .correlation-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        .correlation-table th,
+        .correlation-table td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .correlation-table th {
+            background-color: var(--gray-color);
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+        }
+        .correlation-table td:first-child {
+            text-align: left;
+            font-weight: 700;
+        }
+        /* ヒートマップ風のあしらい */
+        .correlation-table td[data-value] {
+            font-weight: 700;
+            position: relative;
+        }
+        .correlation-table td[data-value="high"] {
+            background-color: #FFFDE7; /* 薄い黄色 */
+            color: #333;
+        }
+        .correlation-table td[data-value="low"] {
+            color: #999;
+            font-weight: 400;
+        }
+        
+        /* 4. 解決策キーワード (カード) */
+        .keywords-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        .keywords-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .keyword-card {
+            background-color: var(--base-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .keyword-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .keyword-card h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        /* 手書き風アイコンあしらい */
+        .keyword-card h3::before {
+            content: '💡';
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: #333;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            line-height: 30px;
+            text-align: center;
+        }
+        .keyword-card[data-key="手数料"] h3::before { content: '💰'; }
+        .keyword-card[data-key="アプリ"] h3::before { content: '📱'; }
+
+        /* ★改善点: 共起ワード説明文 */
+        .co-word-intro {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .co-word-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        .co-word-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 1rem;
+        }
+        .co-word-list li:first-child {
+            font-weight: 700;
+        }
+        .co-word-list .co-word {
+            font-weight: 700;
+        }
+        .co-word-list .co-count {
+            font-size: 0.9rem;
+            color: #555;
+            background-color: var(--gray-color);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* ★改善点: 分析まとめ */
+        .keyword-analysis {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 20px;
+            background-color: var(--gray-color);
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .keyword-analysis h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .keyword-analysis p {
+            margin-bottom: 0;
+        }
+
+        /* 5. 対立とジンテーゼ (カード) */
+        .synthesis-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .synthesis-card {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        .synthesis-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+        }
+        .synthesis-card h3 {
+            font-size: 1.3rem;
+            text-align: center;
+            background-color: var(--gray-color);
+            padding: 15px;
+            margin: 0;
+        }
+        .synthesis-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background-color: var(--border-color);
+        }
+        .synthesis-item {
+            padding: 20px;
+            background-color: var(--base-color);
+        }
+        .synthesis-item h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #777;
+        }
+        .synthesis-item .idea {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            min-height: 4em;
+            display: flex;
+            align-items: center;
+        }
+        .synthesis-footer {
+            background-color: var(--base-color);
+            padding: 25px;
+            border-top: 1px solid var(--border-color);
+        }
+        .synthesis-footer h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        /* AIアイコンあしらい */
+        .synthesis-footer h4::before {
+            content: '✨';
+            font-size: 1rem;
+            margin-right: 8px;
+            color: #333;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            line-height: 24px;
+            text-align: center;
+        }
+        .synthesis-footer .synthesis-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        .synthesis-footer .synthesis-desc {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 10px;
+        }
+
+
+        /* フッター */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 40px;
+            color: #888;
+            font-size: 0.9rem;
+            background-color: var(--gray-color);
+        }
+
+        /* --- 
+         * レスポンシブ対応
+         * --- */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.7rem;
+            }
+            .bar-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .bar-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            .bar-wrap {
+                width: 100%;
+            }
+            .synthesis-body {
+                grid-template-columns: 1fr;
+            }
+            .synthesis-item {
+                border-bottom: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header container fade-in">
+        <h1>銀行サービスの未来を考える</h1>
+        <p class="subtitle">Garrawy Fの参加チケットに寄せられた947件の「声」を分析。そこから見えてきた不便さと、未来への創造的なアイデアをご紹介します。</p>
+    </header>
+
+    <main>
+
+        <section id="profile" class="container fade-in">
+            <h2 class="section-title">どんな人たちがアイデアをくれた？</h2>
+            <div class="profile-grid">
+                <div class="profile-item">
+                    <h3>年代</h3>
+                    <div class="pie-chart-container">
+                        <div class="pie-chart" id="pie-age" role="img" aria-label="年代別円グラフ"></div>
+                    </div>
+                    <ul class="pie-legend">
+                        <li class="legend-color-1">20代 (37.1%)</li>
+                        <li class="legend-color-2">30代＆40代 (33.6%)</li>
+                        <li class="legend-color-3">10代 (24.5%)</li>
+                        <li class="legend-color-4">50代以上 (4.8%)</li>
+                    </ul>
+                </div>
+                <div class="profile-item">
+                    <h3>性別</h3>
+                    <div class="pie-chart-container">
+                        <div class="pie-chart" id="pie-gender" role="img" aria-label="性別円グラフ"></div>
+                    </div>
+                    <ul class="pie-legend">
+                        <li class="legend-color-male">男性 (70.7%)</li>
+                        <li class="legend-color-female">女性 (29.2%)</li>
+                        <li class="legend-color-unknown">不明・未入力 (0.1%)</li>
+                    </ul>
+                </div>
+                <div class="profile-item">
+                    <h3>居住地</h3>
+                    <div class="pie-chart-container">
+                        <div class="pie-chart" id="pie-residence" role="img" aria-label="居住地別円グラフ"></div>
+                    </div>
+                    <ul class="pie-legend">
+                        <li class="legend-color-1">福岡市内 (76.3%)</li>
+                        <li class="legend-color-2">市外で県内 (14.8%)</li>
+                        <li class="legend-color-3">首都圏 (3.6%)</li>
+                        <li class="legend-color-4">その他 (5.3%)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="inconvenience" class="container fade-in">
+            <h2 class="section-title">みんなが感じる「不便さ」は？</h2>
+            <div class="bar-chart-container">
+                <div class="bar-item">
+                    <div class="bar-label">その他・複合</div>
+                    <div class="bar-wrap"><div class="bar" style="width: 25.92%;">25.9%</div></div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">手数料</div>
+                    <div class="bar-wrap"><div class="bar" style="width: 20.56%;">20.6%</div></div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">アプリ・ネット・セキュリティ</div>
+                    <div class="bar-wrap"><div class="bar" style="width: 19.07%;">19.1%</div></div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">窓口・手続き・場所</div>
+                    <div class="bar-wrap"><div class="bar" style="width: 14.00%;">14.0%</div></div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">口座・カード・通帳</div>
+                    <div class="bar-wrap"><div class="bar" style="width: 9.33%;">9.3%</div></div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">ATM関連</div>
+                    <div class="bar-wrap"><div class="bar" style="width: 8.64%;">8.6%</div></div>
+                </div>
+            </div>
+            <div class="correlation-intro" style="margin-top: 30px;">
+                <p>「手数料」や「アプリ・ネット」といったデジタル体験に関する不便さが、全体の約4割を占める主要な要因となっています。</p>
+            </div>
+        </section>
+
+        <section id="correlation" class="container fade-in">
+            <h2 class="section-title">不便さは、誰が感じている？</h2>
+            <div class="correlation-intro">
+                <p>属性ごとに、感じている不便さの傾向に違いが見られました。特に「年代」と「居住地」による差が特徴的です。</p>
+            </div>
+            
+            <h3>年代別の傾向</h3>
+            <div class="table-container">
+                <table class="correlation-table" aria-label="年代と不便さカテゴリの相関表">
+                    <thead>
+                        <tr>
+                            <th>年代</th>
+                            <th>手数料</th>
+                            <th>アプリ・ネット</th>
+                            <th>窓口・手続き</th>
+                            <th>ATM関連</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10代</td>
+                            <td>17.6%</td>
+                            <td>13.4%</td>
+                            <td>13.4%</td>
+                            <td data-value="high">13.8%</td>
+                        </tr>
+                        <tr>
+                            <td>20代</td>
+                            <td data-value="high">23.5%</td>
+                            <td data-value="high">21.8%</td>
+                            <td>13.4%</td>
+                            <td data-value="low">7.3%</td>
+                        </tr>
+                        <tr>
+                            <td>30代＆40代</td>
+                            <td data-value="high">21.2%</td>
+                            <td data-value="high">22.1%</td>
+                            <td>14.0%</td>
+                            <td data-value="low">7.8%</td>
+                        </tr>
+                        <tr>
+                            <td>50代</td>
+                            <td data-value="high">25.6%</td>
+                            <td data-value="low">7.7%</td>
+                            <td data-value="high">30.8%</td>
+                            <td data-value="low">0.0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="correlation-intro" style="margin-top: 20px;">
+                <p><strong>20代〜40代</strong>は「手数料」と「アプリ」への不満が中心ですが、<strong>50代</strong>は「窓口・手続き」への不満が突出しています。<strong>10代</strong>は「ATM関連」の不便さも感じています。</p>
+            </div>
+            
+            <h3>居住地別の傾向 (一部抜粋)</h3>
+            <div class="table-container">
+                <table class="correlation-table" aria-label="居住地と不便さカテゴリの相関表">
+                    <thead>
+                        <tr>
+                            <th>居住地</th>
+                            <th>手数料</th>
+                            <th>アプリ・ネット</th>
+                            <th>窓口・手続き</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>福岡市内</td>
+                            <td data-value="high">21.4%</td>
+                            <td>17.8%</td>
+                            <td>14.4%</td>
+                        </tr>
+                        <tr>
+                            <td>首都圏</td>
+                            <td>14.7%</td>
+                            <td data-value="high">35.3%</td>
+                            <td data-value="low">8.8%</td>
+                        </tr>
+                        <tr>
+                            <td>海外</td>
+                            <td data-value="high">46.2%</td>
+                            <td>15.4%</td>
+                            <td>15.4%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="correlation-intro" style="margin-top: 20px;">
+                <p>「福岡市内」は全体平均と近い一方、<strong>「首都圏」</strong>は「アプリ」への不満が際立って高く、<strong>「海外」</strong>では「手数料」（特に送金）が最大の課題となっています。</p>
+            </div>
+        </section>
+
+        <section id="keywords" class="container fade-in">
+            <h2 class="section-title">頻出キーワード上位3語</h2>
+            <div class="keywords-intro">
+                <p>寄せられた「声」（947件）の中で、特に多く登場した「時間」「手数料」「アプリ」。これらの言葉が、他のどんな言葉と一緒に使われているか（共起）を分析しました。</p>
+            </div>
+            <div class="keywords-grid">
+                <div class="keyword-card" data-key="時間">
+                    <h3>「時間」 (90件)</h3>
+                    <p class="co-word-intro">「時間」と一緒に使われた言葉（共起ワード） Top 5</p>
+                    <ul class="co-word-list">
+                        <li><span class="co-word">24時間</span> <span class="co-count">32件</span></li>
+                        <li><span class="co-word">手数料</span> <span class="co-count">16件</span></li>
+                        <li><span class="co-word">オンライン</span> <span class="co-count">10件</span></li>
+                        <li><span class="co-word">無料</span> <span class="co-count">5件</span></li>
+                        <li><span class="co-word">ネット</span> <span class="co-count">4件</span></li>
+                    </ul>
+                    <div class="keyword-analysis">
+                        <h4>分析から分かること</h4>
+                        <p>「時間」は「24時間」と圧倒的に強く結びついています。ATMや手続きの「時間外」利用への強い要望が背景にあると推測されます。</p>
+                    </div>
+                </div>
+                <div class="keyword-card" data-key="手数料">
+                    <h3>「手数料」 (63件)</h3>
+                    <p class="co-word-intro">「手数料」と一緒に使われた言葉（共起ワード） Top 5</p>
+                    <ul class="co-word-list">
+                        <li><span class="co-word">時間</span> <span class="co-count">16件</span></li>
+                        <li><span class="co-word">無料</span> <span class="co-count">3件</span></li>
+                        <li><span class="co-word">統一</span> <span class="co-count">2件</span></li>
+                        <li><span class="co-word">ネット</span> <span class="co-count">2件</span></li>
+                        <li><span class="co-word">共通</span> <span class="co-count">11件</span></li></ul>
+                    <div class="keyword-analysis">
+                        <h4>分析から分かること</h4>
+                        <p>「手数料」は「時間」と最も強く関連しており、これは「時間外手数料」への不満を示しています。「手数料無料」と「24時間対応」はセットのニーズです。</p>
+                    </div>
+                </div>
+                <div class="keyword-card" data-key="アプリ">
+                    <h3>「アプリ」 (58件)</h3>
+                    <p class="co-word-intro">「アプリ」と一緒に使われた言葉（共起ワード） Top 5</p>
+                    <ul class="co-word-list">
+                        <li><span class="co-word">簡単</span> <span class="co-count">5件</span></li>
+                        <li><span class="co-word">スマホ</span> <span class="co-count">3件</span></li>
+                        <li><span class="co-word">ネット</span> <span class="co-count">3件</span></li>
+                        <li><span class="co-word">無料</span> <span class="co-count">2件</span></li>
+                        <li><span class="co-word">オンライン</span> <span class="co-count">2件</span></li>
+                    </ul>
+                    <div class="keyword-analysis">
+                        <h4>分析から分かること</h4>
+                        <p>アプリには「簡単」な操作性が求められています。「顔認証」や「セキュリティ」も同時に言及されており、安全で使いやすいUI/UXへの改善要望が明確です。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="synthesis" class="container fade-in">
+            <h2 class="section-title">対立から生まれる、次のアイデア</h2>
+            <div class="correlation-intro">
+                <p>一見すると矛盾するようなアイデアも、視点を変えれば新しい解決策（ジンテーゼ）の種になります。AIが3つの未来の形を提案します。</p>
+            </div>
+            <div class="synthesis-grid">
+
+                <div class="synthesis-card">
+                    <h3>セキュリティ vs 利便性</h3>
+                    <div class="synthesis-body">
+                        <div class="synthesis-item">
+                            <h4>実際のアイデア例（テーゼ）</h4>
+                            <p class="idea">ＡＩによるセキュリティ及び管理システムの導入</p>
+                        </div>
+                        <div class="synthesis-item">
+                            <h4>実際のアイデア例（アンチテーゼ）</h4>
+                            <p class="idea">電子マネーをより簡単に統合するシステム</p>
+                        </div>
+                    </div>
+                    <div class="synthesis-footer">
+                        <h4>AIによるジンテーゼ（解決案）</h4>
+                        <p class="synthesis-text">適応型認証（リスクベース認証）の導入</p>
+                        <p class="synthesis-desc">
+                            普段使い（残高確認など）は顔認証だけで「簡単」に。高額振込など「高リスク」な時だけ追加認証を要求。利便性と安全性を両立します。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="synthesis-card">
+                    <h3>デジタル化 vs 物理インフラ</h3>
+                    <div class="synthesis-body">
+                        <div class="synthesis-item">
+                            <h4>実際のアイデア例（テーゼ）</h4>
+                            <p class="idea">インターネット銀行を使う</p>
+                        </div>
+                        <div class="synthesis-item">
+                            <h4>実際のアイデア例（アンチテーゼ）</h4>
+                            <p class="idea">銀行に直接行って対応できる窓口を再開させる</p>
+                        </div>
+                    </div>
+                    <div class="synthesis-footer">
+                        <h4>AIによるジンテーゼ（解決案）</h4>
+                        <p class="synthesis-text">インフラの共同化・仮想化</p>
+                        <p class="synthesis-desc">
+                            入出金はコンビニATMで「共同化」。複雑な相談は「オンライン窓口（アバター対応）」で仮想化し、ネットの利便性と窓口の安心感を両立します。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="synthesis-card">
+                    <h3>手数料無料化 vs ATM増設</h3>
+                    <div class="synthesis-body">
+                        <div class="synthesis-item">
+                            <h4>実際のアイデア例（テーゼ）</h4>
+                            <p class="idea">電子マネー利用の特典として手数料を無料に</p>
+                        </div>
+                        <div class="synthesis-item">
+                            <h4>実際のアイデア例（アンチテーゼ）</h4>
+                            <p class="idea">手数料が取られない銀行のATMの数を増やす</p>
+                        </div>
+                    </div>
+                    <div class="synthesis-footer">
+                        <h4>AIによるジンテーゼ（解決案）</h4>
+                        <p class="synthesis-text">利用度に応じた変動制（フリーミアムモデル）</p>
+                        <p class="synthesis-desc">
+                            アプリなど低コストな利用は「無料」に。ATMなど高コストなサービスは、月3回まで無料とし、それ以上使う人や貢献度が高い人（給与振込）にサービスを提供します。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>&copy; Garrawy F Ticket Analysis Report. All ideas by creative participants.</p>
+    </footer>
+
+</body>
+</html>
